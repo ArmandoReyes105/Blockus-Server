@@ -5,6 +5,13 @@ VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "Host\Host.csproj", "{C271B66A-3A79-4442-B2D6-1B51C6162E6C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{DF5F4A28-BEC1-431E-B872-921709A45A5C}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{B20D2EB6-3CC9-4C76-BE14-7BC84215B2CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +22,10 @@ Global
 		{C271B66A-3A79-4442-B2D6-1B51C6162E6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C271B66A-3A79-4442-B2D6-1B51C6162E6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C271B66A-3A79-4442-B2D6-1B51C6162E6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B20D2EB6-3CC9-4C76-BE14-7BC84215B2CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B20D2EB6-3CC9-4C76-BE14-7BC84215B2CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B20D2EB6-3CC9-4C76-BE14-7BC84215B2CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B20D2EB6-3CC9-4C76-BE14-7BC84215B2CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ServiceModel; 
 
 namespace Host
 {
@@ -10,8 +7,13 @@ namespace Host
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World");
-            Console.ReadLine(); 
+            using (ServiceHost host = new ServiceHost(typeof(Services.Implementations.BlockusService)))
+            {
+                host.Open();
+                Console.WriteLine("Server is running");
+                Console.WriteLine("Press any key to exit ...");
+                Console.ReadLine(); 
+            }
         }
     }
 }
