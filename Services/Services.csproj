@@ -44,12 +44,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\AccountDTO.cs" />
+    <Compile Include="Implementations\AccountService.cs" />
+    <Compile Include="Interfaces\IAccountService.cs" />
     <Compile Include="Interfaces\IService1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementations\ServiceImplementation.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj">
