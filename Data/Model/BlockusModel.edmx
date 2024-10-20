@@ -1,0 +1,469 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BlockusModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id_Account" />
+          </Key>
+          <Property Name="Id_Account" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="254" Nullable="false" />
+          <Property Name="ProfileImage" Type="int" />
+          <Property Name="AccountPassword" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BlackList">
+          <Key>
+            <PropertyRef Name="Id_Banned_Account" />
+          </Key>
+          <Property Name="Id_Banned_Account" Type="int" Nullable="false" />
+          <Property Name="BannedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Friends">
+          <Key>
+            <PropertyRef Name="Id_Friend" />
+          </Key>
+          <Property Name="Id_Friend" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_Account" Type="int" />
+          <Property Name="Id_Account_Friend" Type="int" />
+        </EntityType>
+        <EntityType Name="ProfileConfiguration">
+          <Key>
+            <PropertyRef Name="Id_Configuration" />
+          </Key>
+          <Property Name="Id_Configuration" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BoardStyle" Type="int" />
+          <Property Name="TilesStyle" Type="int" />
+          <Property Name="Id_Account" Type="int" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="Id_Report" />
+          </Key>
+          <Property Name="Id_Report" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReportDescription" Type="nvarchar" MaxLength="200" />
+          <Property Name="ReportDate" Type="date" />
+          <Property Name="Id_Complainant" Type="int" />
+          <Property Name="Id_Reported" Type="int" />
+        </EntityType>
+        <EntityType Name="Results">
+          <Key>
+            <PropertyRef Name="Id_Result" />
+          </Key>
+          <Property Name="Id_Result" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Victories" Type="int" />
+          <Property Name="Losses" Type="int" />
+          <Property Name="Id_Account" Type="int" />
+        </EntityType>
+        <Association Name="FK_AccountFriend_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Friends" Type="Self.Friends" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="Friends">
+              <PropertyRef Name="Id_Account_Friend" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BlackList_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="BlackList" Type="Self.BlackList" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="BlackList">
+              <PropertyRef Name="Id_Banned_Account" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Complainant_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="Id_Complainant" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Configuration_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProfileConfiguration" Type="Self.ProfileConfiguration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="ProfileConfiguration">
+              <PropertyRef Name="Id_Account" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friend_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Friends" Type="Self.Friends" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="Friends">
+              <PropertyRef Name="Id_Account" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reported_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="Id_Reported" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Result_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Results" Type="Self.Results" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="Results">
+              <PropertyRef Name="Id_Account" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BlockusModelStoreContainer">
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlackList" EntityType="Self.BlackList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Friends" EntityType="Self.Friends" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProfileConfiguration" EntityType="Self.ProfileConfiguration" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Results" EntityType="Self.Results" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AccountFriend_Account" Association="Self.FK_AccountFriend_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Friends" EntitySet="Friends" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BlackList_Account" Association="Self.FK_BlackList_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="BlackList" EntitySet="BlackList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Complainant_Account" Association="Self.FK_Complainant_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Configuration_Account" Association="Self.FK_Configuration_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="ProfileConfiguration" EntitySet="ProfileConfiguration" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friend_Account" Association="Self.FK_Friend_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Friends" EntitySet="Friends" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reported_Account" Association="Self.FK_Reported_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Result_Account" Association="Self.FK_Result_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Results" EntitySet="Results" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BlockusModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id_Account" />
+          </Key>
+          <Property Name="Id_Account" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="254" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProfileImage" Type="Int32" />
+          <Property Name="AccountPassword" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Friends" Relationship="Self.FK_AccountFriend_Account" FromRole="Account" ToRole="Friends" />
+          <NavigationProperty Name="BlackList" Relationship="Self.FK_BlackList_Account" FromRole="Account" ToRole="BlackList" />
+          <NavigationProperty Name="Report" Relationship="Self.FK_Complainant_Account" FromRole="Account" ToRole="Report" />
+          <NavigationProperty Name="ProfileConfiguration" Relationship="Self.FK_Configuration_Account" FromRole="Account" ToRole="ProfileConfiguration" />
+          <NavigationProperty Name="Friends1" Relationship="Self.FK_Friend_Account" FromRole="Account" ToRole="Friends" />
+          <NavigationProperty Name="Report1" Relationship="Self.FK_Reported_Account" FromRole="Account" ToRole="Report" />
+          <NavigationProperty Name="Results" Relationship="Self.FK_Result_Account" FromRole="Account" ToRole="Results" />
+        </EntityType>
+        <EntityType Name="BlackList">
+          <Key>
+            <PropertyRef Name="Id_Banned_Account" />
+          </Key>
+          <Property Name="Id_Banned_Account" Type="Int32" Nullable="false" />
+          <Property Name="BannedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_BlackList_Account" FromRole="BlackList" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="Friends">
+          <Key>
+            <PropertyRef Name="Id_Friend" />
+          </Key>
+          <Property Name="Id_Friend" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Account" Type="Int32" />
+          <Property Name="Id_Account_Friend" Type="Int32" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_AccountFriend_Account" FromRole="Friends" ToRole="Account" />
+          <NavigationProperty Name="Account1" Relationship="Self.FK_Friend_Account" FromRole="Friends" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="ProfileConfiguration">
+          <Key>
+            <PropertyRef Name="Id_Configuration" />
+          </Key>
+          <Property Name="Id_Configuration" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BoardStyle" Type="Int32" />
+          <Property Name="TilesStyle" Type="Int32" />
+          <Property Name="Id_Account" Type="Int32" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Configuration_Account" FromRole="ProfileConfiguration" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="Id_Report" />
+          </Key>
+          <Property Name="Id_Report" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReportDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ReportDate" Type="DateTime" Precision="0" />
+          <Property Name="Id_Complainant" Type="Int32" />
+          <Property Name="Id_Reported" Type="Int32" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Complainant_Account" FromRole="Report" ToRole="Account" />
+          <NavigationProperty Name="Account1" Relationship="Self.FK_Reported_Account" FromRole="Report" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="Results">
+          <Key>
+            <PropertyRef Name="Id_Result" />
+          </Key>
+          <Property Name="Id_Result" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Victories" Type="Int32" />
+          <Property Name="Losses" Type="Int32" />
+          <Property Name="Id_Account" Type="Int32" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Result_Account" FromRole="Results" ToRole="Account" />
+        </EntityType>
+        <Association Name="FK_AccountFriend_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Friends" Type="Self.Friends" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="Friends">
+              <PropertyRef Name="Id_Account_Friend" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BlackList_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="BlackList" Type="Self.BlackList" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="BlackList">
+              <PropertyRef Name="Id_Banned_Account" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Complainant_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="Id_Complainant" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Configuration_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProfileConfiguration" Type="Self.ProfileConfiguration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="ProfileConfiguration">
+              <PropertyRef Name="Id_Account" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Friend_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Friends" Type="Self.Friends" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="Friends">
+              <PropertyRef Name="Id_Account" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reported_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="Id_Reported" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Result_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Results" Type="Self.Results" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id_Account" />
+            </Principal>
+            <Dependent Role="Results">
+              <PropertyRef Name="Id_Account" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BlockusEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Account" EntityType="Self.Account" />
+          <EntitySet Name="BlackList" EntityType="Self.BlackList" />
+          <EntitySet Name="Friends" EntityType="Self.Friends" />
+          <EntitySet Name="ProfileConfiguration" EntityType="Self.ProfileConfiguration" />
+          <EntitySet Name="Report" EntityType="Self.Report" />
+          <EntitySet Name="Results" EntityType="Self.Results" />
+          <AssociationSet Name="FK_AccountFriend_Account" Association="Self.FK_AccountFriend_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Friends" EntitySet="Friends" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BlackList_Account" Association="Self.FK_BlackList_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="BlackList" EntitySet="BlackList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Complainant_Account" Association="Self.FK_Complainant_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Configuration_Account" Association="Self.FK_Configuration_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="ProfileConfiguration" EntitySet="ProfileConfiguration" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Friend_Account" Association="Self.FK_Friend_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Friends" EntitySet="Friends" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reported_Account" Association="Self.FK_Reported_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Result_Account" Association="Self.FK_Result_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Results" EntitySet="Results" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BlockusModelStoreContainer" CdmEntityContainer="BlockusEntities">
+          <EntitySetMapping Name="Account">
+            <EntityTypeMapping TypeName="BlockusModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="Id_Account" ColumnName="Id_Account" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ProfileImage" ColumnName="ProfileImage" />
+                <ScalarProperty Name="AccountPassword" ColumnName="AccountPassword" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlackList">
+            <EntityTypeMapping TypeName="BlockusModel.BlackList">
+              <MappingFragment StoreEntitySet="BlackList">
+                <ScalarProperty Name="Id_Banned_Account" ColumnName="Id_Banned_Account" />
+                <ScalarProperty Name="BannedDate" ColumnName="BannedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Friends">
+            <EntityTypeMapping TypeName="BlockusModel.Friends">
+              <MappingFragment StoreEntitySet="Friends">
+                <ScalarProperty Name="Id_Friend" ColumnName="Id_Friend" />
+                <ScalarProperty Name="Id_Account" ColumnName="Id_Account" />
+                <ScalarProperty Name="Id_Account_Friend" ColumnName="Id_Account_Friend" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProfileConfiguration">
+            <EntityTypeMapping TypeName="BlockusModel.ProfileConfiguration">
+              <MappingFragment StoreEntitySet="ProfileConfiguration">
+                <ScalarProperty Name="Id_Configuration" ColumnName="Id_Configuration" />
+                <ScalarProperty Name="BoardStyle" ColumnName="BoardStyle" />
+                <ScalarProperty Name="TilesStyle" ColumnName="TilesStyle" />
+                <ScalarProperty Name="Id_Account" ColumnName="Id_Account" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Report">
+            <EntityTypeMapping TypeName="BlockusModel.Report">
+              <MappingFragment StoreEntitySet="Report">
+                <ScalarProperty Name="Id_Report" ColumnName="Id_Report" />
+                <ScalarProperty Name="ReportDescription" ColumnName="ReportDescription" />
+                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
+                <ScalarProperty Name="Id_Complainant" ColumnName="Id_Complainant" />
+                <ScalarProperty Name="Id_Reported" ColumnName="Id_Reported" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Results">
+            <EntityTypeMapping TypeName="BlockusModel.Results">
+              <MappingFragment StoreEntitySet="Results">
+                <ScalarProperty Name="Id_Result" ColumnName="Id_Result" />
+                <ScalarProperty Name="Victories" ColumnName="Victories" />
+                <ScalarProperty Name="Losses" ColumnName="Losses" />
+                <ScalarProperty Name="Id_Account" ColumnName="Id_Account" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

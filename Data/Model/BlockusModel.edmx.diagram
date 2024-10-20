@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f1b7977fb5054bfebc2c42c9d8695302" Name="Diagram1">
+        <EntityTypeShape EntityType="BlockusModel.Account" Width="1.5" PointX="0.75" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlockusModel.BlackList" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlockusModel.Friends" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlockusModel.ProfileConfiguration" Width="1.5" PointX="3" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlockusModel.Report" Width="1.5" PointX="3" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlockusModel.Results" Width="1.5" PointX="3" PointY="12.375" IsExpanded="true" />
+        <AssociationConnector Association="BlockusModel.FK_AccountFriend_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="BlockusModel.FK_BlackList_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="BlockusModel.FK_Complainant_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="BlockusModel.FK_Configuration_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="BlockusModel.FK_Friend_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="BlockusModel.FK_Reported_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="BlockusModel.FK_Result_Account" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
