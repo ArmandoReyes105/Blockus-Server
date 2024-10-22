@@ -62,6 +62,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Data\Data.csproj">
+      <Project>{0e8e8c4a-551c-4607-ba51-a25b72d07db0}</Project>
+      <Name>Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Services\Services.csproj">
       <Project>{6d50403b-d537-45e3-a069-2057b5f3b3b6}</Project>
       <Name>Services</Name>
