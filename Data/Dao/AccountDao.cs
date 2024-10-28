@@ -62,12 +62,10 @@ namespace Data.Dao
         {
             using (var context = new BlockusEntities())
             {
-                using (var transaction = context.Database.BeginTransaction())
-                {
                     try
                     {
                         var userAcc = context.Account
-                            .Where(a => a.Username == username || a.Email == username && a.AccountPassword == password)
+                            .Where(a => (a.Username.Equals(username) || a.Email.Equals(username)) && a.AccountPassword.Equals(password))
                             .FirstOrDefault();
                         if (userAcc != null)
                         {
@@ -77,8 +75,7 @@ namespace Data.Dao
                     {
                         Console.WriteLine(ex.Message);
                     }
-                    return null; //probando
-                }
+                    return null;
             }
         }
     }
