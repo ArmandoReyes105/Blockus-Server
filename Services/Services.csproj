@@ -46,8 +46,10 @@
   <ItemGroup>
     <Compile Include="Dtos\AccountDTO.cs" />
     <Compile Include="Implementations\AccountService.cs" />
+    <Compile Include="Implementations\SessionService.cs" />
     <Compile Include="Interfaces\IAccountService.cs" />
     <Compile Include="Interfaces\IService1.cs" />
+    <Compile Include="Interfaces\ISessionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementations\ServiceImplementation.cs" />
   </ItemGroup>

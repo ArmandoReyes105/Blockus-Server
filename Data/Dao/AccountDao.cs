@@ -8,10 +8,7 @@ namespace Data.Dao
 {
     public class AccountDao
     {
-        public AccountDao()
-        {
-            
-        }
+        public AccountDao(){ }
 
         public int CreateAccount(Account account)
         {
@@ -60,23 +57,42 @@ namespace Data.Dao
 
         public Account Login(string username, string password) 
         {
+
+            Account resultAccount;  
+
             using (var context = new BlockusEntities())
             {
-                    try
+                try
+                {
+
+                    resultAccount = context.Account
+                        .Where(a => (a.Username.Equals(username) || a.Email.Equals(username)) && a.AccountPassword.Equals(password))
+                        .FirstOrDefault();
+
+                } 
+                catch (SqlException ex)
+                {
+                    Console.WriteLine(ex.Message);
+
+                    resultAccount = new Account
                     {
-                        var userAcc = context.Account
-                            .Where(a => (a.Username.Equals(username) || a.Email.Equals(username)) && a.AccountPassword.Equals(password))
-                            .FirstOrDefault();
-                        if (userAcc != null)
-                        {
-                            return userAcc;
-                        }
-                    } catch (SqlException ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                    return null;
+                        Id_Account = -1,
+                        ProfileImage = 0
+                    };
+                }
             }
+
+            if (resultAccount == null)
+            {
+                resultAccount = new Account
+                {
+                    Id_Account = 0,
+                    ProfileImage = 0
+                }; 
+                
+            }
+
+            return resultAccount; 
         }
     }
 }

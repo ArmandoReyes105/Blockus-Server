@@ -19,8 +19,6 @@ namespace Services.Implementations
                 AccountPassword = accountDTO.Password
             };
 
-            Console.WriteLine(accountDTO.Username);
-
             AccountDao dao = new AccountDao();
             int result = dao.CreateAccount(account);
 
