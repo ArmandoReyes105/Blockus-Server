@@ -80,6 +80,15 @@ namespace Data.Dao
                         ProfileImage = 0
                     };
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    resultAccount = new Account
+                    {
+                        Id_Account = -1,
+                        ProfileImage = 0
+                    };
+                }
             }
 
             if (resultAccount == null)
