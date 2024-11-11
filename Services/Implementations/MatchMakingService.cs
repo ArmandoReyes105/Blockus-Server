@@ -1,33 +1,32 @@
 ﻿using Services.Dtos;
 using Services.Enums;
 using Services.Interfaces;
-using System;
+using Services.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using System.Text;
 
 namespace Services.Implementations
 {
     public partial class ServiceImplementation : IMatchMakingService
     {
-        private static Dictionary<string, IMatchMakingServiceCallback> usersInMatchMaking = new Dictionary<string, IMatchMakingServiceCallback> ();
-        private static Dictionary<string, MatchDTO> matches = new Dictionary<string, MatchDTO>();
+        private static readonly Dictionary<string, IMatchMakingServiceCallback> usersInMatchMaking = new Dictionary<string, IMatchMakingServiceCallback> ();
+        private static readonly Dictionary<string, MatchDTO> matches = new Dictionary<string, MatchDTO>();
 
         public MatchDTO CreateMatch(PublicAccountDTO hostAccount)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IMatchMakingServiceCallback>();
+            var matchCode = RandomGenerator.GenerateRandomCode();
+            var color = RandomGenerator.GetColorNotInList(Enumerable.Empty<Color>());
+
             var match = new MatchDTO
             {
                 MatchType = GameType.Private,
-                ColorsOrder = GetRandomColorOrder(),
-                MatchCode = GenerateRandomCode(),
+                MatchCode = matchCode,
                 Host = hostAccount.Username,
                 NumberOfPlayers = 4,
-                Players = new List<PublicAccountDTO>()
+                Players = new Dictionary<Color, PublicAccountDTO> { [color] = hostAccount }
             };
-
-            match.Players.Add(hostAccount);
 
             usersInMatchMaking.Add(hostAccount.Username, callback);
             matches.Add(match.MatchCode, match); 
@@ -35,36 +34,58 @@ namespace Services.Implementations
             return match; 
         }
 
-        public bool JoinToMatch(PublicAccountDTO account, string matchCode)
+        public MatchDTO JoinToMatch(PublicAccountDTO account, string matchCode)
         {
-            return true; 
-        }
-
-        private IEnumerable<Color> GetRandomColorOrder()
-        {
-            var colors = Enum.GetValues(typeof(Color)).Cast<Color>().ToList();
-            var random = new Random();
-            return colors.OrderBy(c => random.Next()).ToList(); 
-        }
-
-        private string GenerateRandomCode()
-        {
-            StringBuilder code = new StringBuilder();
-            Random random = new Random(); 
-
-            for (int i = 0; i < 3; i++)
+            
+            if (!matches.TryGetValue(matchCode, out var match))
             {
-                char letter = (char)random.Next('A', 'Z' + 1);
-                code.Append(letter);
+                return new MatchDTO { Host = "0"}; 
             }
 
-            for (int i = 0; i < 3; i++)
+            if (match.Players.Count() >= match.NumberOfPlayers)
             {
-                int number = random.Next(0, 10);
-                code.Append(number);
+                return new MatchDTO { Host = "-1" }; 
             }
 
-            return code.ToString(); 
+            var callback = OperationContext.Current.GetCallbackChannel<IMatchMakingServiceCallback>();
+            usersInMatchMaking.Add(account.Username, callback);
+
+            var color = RandomGenerator.GetColorNotInList(match.Players.Keys);
+            match.Players.Add(color,account);
+
+            var players = match.Players.Values.Where(p => p.Username != account.Username).ToList();
+            players.ForEach(player => usersInMatchMaking[player.Username].NotifyPlayerEntry(match)); 
+
+            return match;
+        }
+
+        public void LeaveMatch(string username)
+        {
+            MatchDTO match = matches.Values.FirstOrDefault(m => m.Players.Values.Any(p => p.Username == username));
+            usersInMatchMaking.Remove(username);
+
+            if (match != null) 
+            {
+                var key = match.Players.FirstOrDefault(p => p.Value.Username == username).Key;
+                match.Players.Remove(key);
+
+                if (match.Host == username)
+                {
+                    
+                    match.Players.Values.ToList().ForEach(p =>
+                    {
+                        usersInMatchMaking[p.Username].NotifyHostExit(match);
+                        usersInMatchMaking.Remove(p.Username); 
+                    });
+
+                    matches.Remove(match.MatchCode);
+                }
+                else
+                {
+                    var players = match.Players.Values.ToList();
+                    players.ForEach(p => usersInMatchMaking[p.Username].NotifyPlayerExit(match));
+                }
+            }
         }
     }
 }

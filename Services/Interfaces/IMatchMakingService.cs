@@ -10,12 +10,22 @@ namespace Services.Interfaces
         MatchDTO CreateMatch(PublicAccountDTO hostAccount);
 
         [OperationContract]
-        bool JoinToMatch(PublicAccountDTO account, string matchCode); 
+        MatchDTO JoinToMatch(PublicAccountDTO account, string matchCode);
+
+        [OperationContract(IsOneWay = true)]
+        void LeaveMatch(string username);
     }
 
     [ServiceContract]
     public interface IMatchMakingServiceCallback
     {
+        [OperationContract]
+        void NotifyPlayerEntry(MatchDTO matchDTO);
 
+        [OperationContract]
+        void NotifyPlayerExit(MatchDTO matchDTO);
+
+        [OperationContract]
+        void NotifyHostExit(MatchDTO matchDTO);
     }
 }

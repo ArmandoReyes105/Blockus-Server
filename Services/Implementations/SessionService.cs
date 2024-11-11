@@ -43,6 +43,11 @@ namespace Services.Implementations
         {
             Console.WriteLine($"{username} cerró sesión");
             connectedUsers.Remove(username);
+
+            if (usersInMatchMaking.ContainsKey(username))
+            {
+                LeaveMatch(username); 
+            }
         }
     }
 }

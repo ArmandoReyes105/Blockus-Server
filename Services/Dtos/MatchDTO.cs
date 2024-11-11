@@ -20,9 +20,6 @@ namespace Services.Dtos
         public int NumberOfPlayers { get; set; }
 
         [DataMember]
-        public IEnumerable<Color> ColorsOrder { get; set; }
-
-        [DataMember]
-        public List<PublicAccountDTO> Players { get; set; }
+        public Dictionary<Color, PublicAccountDTO> Players { get; set; }
     }
 }
