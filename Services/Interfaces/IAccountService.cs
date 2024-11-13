@@ -9,7 +9,5 @@ namespace Services.Interfaces
     {
         [OperationContract]
         int CreateAccount(AccountDTO accountDTO);
-        [OperationContract]
-        Account Login(string username, string password);
     }
 }

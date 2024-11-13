@@ -80,6 +80,21 @@ namespace Data.Dao
                         ProfileImage = 0
                     };
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+
+                    if (e.InnerException != null)
+                    {
+                        Console.WriteLine("Detalles internos: " + e.InnerException.Message);
+                    }
+
+                    resultAccount = new Account
+                    {
+                        Id_Account = -1,
+                        ProfileImage = 0
+                    };
+                }
             }
 
             if (resultAccount == null)

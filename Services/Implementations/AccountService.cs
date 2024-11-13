@@ -2,7 +2,6 @@
 using Data.Model;
 using Services.Dtos;
 using Services.Interfaces;
-using System;
 
 namespace Services.Implementations
 {
@@ -25,25 +24,5 @@ namespace Services.Implementations
             return result; 
         }
 
-        public Account Login(string username, string password)
-        {
-            var dao = new AccountDao();
-            var account = dao.Login(username, password);
-
-            if (account != null)
-            {
-                return new Account()
-                {
-                    Username = account.Username,
-                    Email = account.Email,
-                    ProfileImage = 1,
-                    AccountPassword = account.AccountPassword
-                };
-            }
-            else
-            {
-                return null;
-            }
-        }
     }
 }
