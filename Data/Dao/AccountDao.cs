@@ -1,5 +1,6 @@
 ﻿using Data.Model;
 using System;
+using System.Data.Entity.Core;
 using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
@@ -31,6 +32,14 @@ namespace Data.Dao
                             TilesStyle = 1
                         };
 
+                        var results = new Results
+                        {
+                            Id_Account = account.Id_Account,
+                            Victories = 0,
+                            Losses = 0
+                        };
+                        
+                        context.Results.Add(results);
                         context.ProfileConfiguration.Add(configuration);
                         context.SaveChanges();
 
@@ -102,6 +111,45 @@ namespace Data.Dao
             }
 
             return resultAccount; 
+        }
+
+        public int UpdateAccount(Account account)
+        {
+            try
+            {
+                using (var context = new BlockusEntities())
+                {
+                    var acc = context.Account.FirstOrDefault(a => a.Id_Account == account.Id_Account);
+
+                    if (acc == null)
+                    {
+                        Console.WriteLine("Account with Id: " + account.Id_Account + " not found");
+                        return 0;
+                    }
+
+                    acc.AccountPassword = account.AccountPassword;
+                    acc.Username = account.Username;
+                    acc.ProfileConfiguration = account.ProfileConfiguration;
+                    acc.ProfileImage = account.ProfileImage;
+
+                    int affectedRows = context.SaveChanges();
+
+                    return affectedRows;
+                }
+            }
+            catch (EntityException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return 0;
         }
     }
 }

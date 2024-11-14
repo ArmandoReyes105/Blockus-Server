@@ -46,7 +46,9 @@
   <ItemGroup>
     <Compile Include="Dtos\AccountDTO.cs" />
     <Compile Include="Dtos\MatchDTO.cs" />
+    <Compile Include="Dtos\ProfileConfigurationDTO.cs" />
     <Compile Include="Dtos\PublicAccountDTO.cs" />
+    <Compile Include="Dtos\ResultsDTO.cs" />
     <Compile Include="Enums\Color.cs" />
     <Compile Include="Enums\GameType.cs" />
     <Compile Include="Implementations\AccountService.cs" />

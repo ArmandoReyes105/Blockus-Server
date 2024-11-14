@@ -9,5 +9,11 @@ namespace Services.Interfaces
     {
         [OperationContract]
         int CreateAccount(AccountDTO accountDTO);
+        [OperationContract]
+        int UpdateAccount(AccountDTO accountDTO);
+        [OperationContract]
+        ResultsDTO GetAccountResults(int idAccount);
+        [OperationContract]
+        ProfileConfigurationDTO GetProfileConfiguration(int idAccount);
     }
 }

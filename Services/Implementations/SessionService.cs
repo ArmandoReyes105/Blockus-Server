@@ -1,4 +1,5 @@
 ﻿using Data.Dao;
+using Data.Model;
 using Services.Dtos;
 using Services.Interfaces;
 using System;
