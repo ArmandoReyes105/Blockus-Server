@@ -54,6 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dao\AccountDao.cs" />
+    <Compile Include="Dao\ProfileConfigurationDao.cs" />
+    <Compile Include="Dao\ResultsDao.cs" />
     <Compile Include="Model\Account.cs">
       <DependentUpon>BlockusModel.tt</DependentUpon>
     </Compile>
@@ -96,7 +98,7 @@
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
+    <None Include="App.config" />
     <None Include="Model\BlockusModel.edmx.diagram">
       <DependentUpon>BlockusModel.edmx</DependentUpon>
     </None>

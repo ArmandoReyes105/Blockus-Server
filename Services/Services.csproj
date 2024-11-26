@@ -45,8 +45,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dtos\AccountDTO.cs" />
+    <Compile Include="Dtos\FriendsDTO.cs" />
     <Compile Include="Dtos\MatchDTO.cs" />
+    <Compile Include="Dtos\ProfileConfigurationDTO.cs" />
     <Compile Include="Dtos\PublicAccountDTO.cs" />
+    <Compile Include="Dtos\ResultsDTO.cs" />
     <Compile Include="Enums\Color.cs" />
     <Compile Include="Enums\GameType.cs" />
     <Compile Include="Implementations\AccountService.cs" />
@@ -64,7 +67,6 @@
       <Name>Data</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <VSToolsPath Condition="'$(VSToolsPath)' == '' and '$(VisualStudioVersion)' != '' and '$(VisualStudioVersion)' != '11.0'">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
