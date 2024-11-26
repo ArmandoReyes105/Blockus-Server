@@ -78,27 +78,35 @@ namespace Services.Implementations
             return result;
         }
 
-        public List<FriendsDTO> GetAddedFriends(int idAccount)
+        public List<PublicAccountDTO> GetAddedFriends(int idAccount)
         {
+            AccountDao dao = new AccountDao();
             List<Account> friends = new List<Account>();
             List<PublicAccountDTO> friendsDTO = new List<PublicAccountDTO>();
-            AccountDao dao = new AccountDao();
 
             var accountFriends = dao.GetAccountFriends(idAccount);
 
-            foreach (var friendship in accountFriends)
+            foreach(var friend in accountFriends)
             {
-                var account = dao.getAccountById(friendship.Id_Friend);
-                friends.Add(account);
+                var friendAccount = dao.getAccountById((int)friend.Id_Account_Friend);
+                friends.Add(friendAccount);
             }
 
-            return accountFriends.Select(f => new FriendsDTO
+            foreach(var friendInfo in friends)
             {
-                IdFriend = f.Id_Friend,
-                IdAccount = (int)f.Id_Account,
-                IdAccountFriend = (int)f.Id_Account_Friend
-            }).ToList();
+                var dto = new PublicAccountDTO
+                {
+                    Id = friendInfo.Id_Account,
+                    Username = friendInfo.Username,
+                    ProfileImage = (int)friendInfo.ProfileImage
+                };
+
+                friendsDTO.Add(dto);
+            }
+
+            return friendsDTO;
         }
+
 
         public int DeleteFriend(int idFriend, int idAccount)
         {

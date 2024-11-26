@@ -20,7 +20,7 @@ namespace Services.Interfaces
         [OperationContract]
         int AddFriend(int idAccount, int IdAccountFriend);
         [OperationContract]
-        List<FriendsDTO> GetAddedFriends(int idAccount);
+        List<PublicAccountDTO> GetAddedFriends(int idAccount);
         [OperationContract]
         int DeleteFriend(int idFriend, int idAccount);
     }

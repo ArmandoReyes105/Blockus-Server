@@ -219,7 +219,7 @@ namespace Data.Dao
                 using (var context = new BlockusEntities())
                 {
                     var deletedFriend = context.Friends.FirstOrDefault(f => f.Id_Account == idAccount 
-                        && f.Id_Friend == idFriend);
+                        && f.Id_Account_Friend == idFriend);
 
                     if (deletedFriend != null)
                     {
