@@ -88,7 +88,7 @@ namespace Services.Implementations
 
             foreach(var friend in accountFriends)
             {
-                var friendAccount = dao.getAccountById((int)friend.Id_Account_Friend);
+                var friendAccount = dao.GetAccountById((int)friend.Id_Account_Friend);
                 friends.Add(friendAccount);
             }
 
@@ -107,14 +107,39 @@ namespace Services.Implementations
             return friendsDTO;
         }
 
-
         public int DeleteFriend(int idFriend, int idAccount)
         {
             AccountDao dao = new AccountDao();
 
-            int stillFriends = dao.removeFriendById(idFriend, idAccount);
+            int stillFriends = dao.RemoveFriendById(idFriend, idAccount);
 
             return stillFriends;
+        }
+
+        public List<PublicAccountDTO> SearchByUsername(string username)
+        {
+            if (string.IsNullOrEmpty(username))
+            {
+                return new List<PublicAccountDTO>();
+            }
+
+            AccountDao dao = new AccountDao();
+            List<PublicAccountDTO> userMatches = new List<PublicAccountDTO>();
+
+            var foundUsers = dao.GetAccountsByUsername(username);
+
+            foreach(var user in foundUsers)
+            {
+                var dto = new PublicAccountDTO
+                {
+                    Id = user.Id_Account,
+                    Username = user.Username,
+                    ProfileImage = (int)user.ProfileImage
+                };
+                userMatches.Add(dto);
+            }
+
+            return userMatches;
         }
     }
 }

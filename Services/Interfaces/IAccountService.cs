@@ -16,12 +16,13 @@ namespace Services.Interfaces
         ResultsDTO GetAccountResults(int idAccount);
         [OperationContract]
         ProfileConfigurationDTO GetProfileConfiguration(int idAccount);
-        //TODO
         [OperationContract]
         int AddFriend(int idAccount, int IdAccountFriend);
         [OperationContract]
         List<PublicAccountDTO> GetAddedFriends(int idAccount);
         [OperationContract]
         int DeleteFriend(int idFriend, int idAccount);
+        [OperationContract]
+        List<PublicAccountDTO> SearchByUsername(string username);
     }
 }

@@ -158,6 +158,11 @@ namespace Data.Dao
         {
             try
             {
+                if (idAccount == idAccountFriend)
+                {
+                    Console.WriteLine(idAccountFriend + " is you\n");
+                    return -2;
+                }
                 using (var context = new BlockusEntities())
                 {
                     var alreadyFriends = context.Friends
@@ -166,6 +171,7 @@ namespace Data.Dao
 
                     if (alreadyFriends != null)
                     {
+                        Console.WriteLine("Already friends...\n");
                         return 0;
                     }
 
@@ -212,7 +218,7 @@ namespace Data.Dao
             }
         }
 
-        public int removeFriendById(int idFriend, int idAccount)
+        public int RemoveFriendById(int idFriend, int idAccount)
         {
             try
             {
@@ -247,7 +253,7 @@ namespace Data.Dao
             }
         }
 
-        public Account getAccountById(int idAccount)
+        public Account GetAccountById(int idAccount)
         {
             Account resultAccount;
             try
@@ -294,6 +300,25 @@ namespace Data.Dao
             }
 
             return resultAccount;
+        }
+
+        public List<Account> GetAccountsByUsername(string username)
+        {
+            try
+            {
+                using(var context = new BlockusEntities())
+                {
+                    return context.Account.Where(a => a.Username.Contains(username)).ToList();
+                }
+            } catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<Account>();
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<Account>();
+            }
         }
     }
 }
