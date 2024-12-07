@@ -42,5 +42,19 @@ namespace Services.Utilities
             return randomColor; 
         }
 
+        public static int GetRandomTurn(int numberOfPlayer, List<int> usedTurns)
+        {
+            var availableTurns = Enumerable.Range(1, numberOfPlayer).Except(usedTurns).ToList();
+            var random = new Random();
+
+            return availableTurns[random.Next(availableTurns.Count)]; 
+        }
+
+        public static List<Color> ShuffleColors(List<Color> colors)
+        {
+            Random random = new Random();
+            return colors.OrderBy(_ => random.Next()).ToList();
+        }
+
     }
 }

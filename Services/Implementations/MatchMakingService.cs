@@ -14,7 +14,8 @@ namespace Services.Implementations
 
         public ServiceImplementation()
         {
-            _matchMakingController = new MatchMakingController(usersInMatchMaking, matches); 
+            _matchMakingController = new MatchMakingController(usersInMatchMaking, matches);
+            _matchController = new MatchController(usersInMatchMaking, usersInActiveMatch, matches, activeMatches); 
         }
 
         public MatchDTO CreateMatch(PublicAccountDTO hostAccount)

@@ -48,6 +48,11 @@ namespace Services.Implementations
             {
                 LeaveMatch(username); 
             }
+
+            if (usersInActiveMatch.ContainsKey(username))
+            {
+                LeaveActiveMatch(username);
+            }
         }
     }
 }

@@ -57,5 +57,25 @@ namespace Tests.Utilities
 
             Assert.AreEqual(Color.Red, result);
         }
+
+        [TestMethod]
+        public void GetRandomTurn_ShouldReturnNumberNotInList()
+        {
+            var excludedNumbers = new List<int> { 1, 2 };
+
+            var result = RandomGenerator.GetRandomTurn(4, excludedNumbers);
+
+            Assert.IsFalse(excludedNumbers.Contains(result));
+        }
+
+        [TestMethod]
+        public void GetRandomTurn_ShouldReturnNumberFour()
+        {
+            var excludenNumbers = new List<int> { 1, 2, 3 };
+
+            var result = RandomGenerator.GetRandomTurn(4, excludenNumbers);
+
+            Assert.AreEqual(4, result);
+        }
     }
 }

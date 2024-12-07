@@ -44,18 +44,27 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\MatchController.cs" />
     <Compile Include="Controllers\MatchMakingController.cs" />
     <Compile Include="Dtos\AccountDTO.cs" />
+    <Compile Include="Dtos\BlockDTO.cs" />
     <Compile Include="Dtos\MatchDTO.cs" />
     <Compile Include="Dtos\PublicAccountDTO.cs" />
+    <Compile Include="Enums\Block.cs" />
     <Compile Include="Enums\Color.cs" />
+    <Compile Include="Enums\GameResult.cs" />
     <Compile Include="Enums\GameType.cs" />
+    <Compile Include="Enums\Movement.cs" />
     <Compile Include="Implementations\AccountService.cs" />
     <Compile Include="Implementations\MatchMakingService.cs" />
+    <Compile Include="Implementations\MatchService.cs" />
     <Compile Include="Implementations\SessionService.cs" />
     <Compile Include="Interfaces\IAccountService.cs" />
     <Compile Include="Interfaces\IMatchMakingService.cs" />
+    <Compile Include="Interfaces\IMatchService.cs" />
     <Compile Include="Interfaces\ISessionService.cs" />
+    <Compile Include="MatchState\ActiveMatch.cs" />
+    <Compile Include="MatchState\PlayerState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\RandomGenerator.cs" />
   </ItemGroup>
