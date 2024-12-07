@@ -55,14 +55,7 @@ namespace Services.Controllers
         public BlockDTO GetCurrentBlock(string matchCode)
         {
             var activeMatch = _activeMatches[matchCode];
-
-            var block = new BlockDTO
-            {
-                Block = activeMatch.Block,
-                Color = activeMatch.TurnOrder[activeMatch.Turn]
-            };
-
-            return block;
+            return activeMatch.GetCurrentBlockAsDTO();
         }
 
         public GameResult PlaceBlock(string matchCode, int points)
@@ -72,11 +65,11 @@ namespace Services.Controllers
 
             activeMatch.Skips = 0; 
 
-            PlayerState currentPlayer = GetCurrentPlayer(activeMatch);
-            PlayerState nextPlayer = GetNextPlayer(activeMatch); 
+            PlayerState currentPlayer = activeMatch.GetCurrentPlayer();
+            PlayerState nextPlayer = activeMatch.GetNextPlayer(); 
 
             currentPlayer.Puntuation += points;
-            currentPlayer.BlocksList.Remove(activeMatch.Block);
+            currentPlayer.RemoveBlock(activeMatch.Block);
 
             if (currentPlayer.BlocksList.Count == 0)
             {
@@ -85,7 +78,7 @@ namespace Services.Controllers
             }
             else
             {
-                activeMatch.Turn = GetNextTurn(activeMatch);
+                activeMatch.AdvanceTurn();
 
                 foreach (var player in activeMatch.Players.Values)
                 {
@@ -127,8 +120,8 @@ namespace Services.Controllers
             var activeMatch = _activeMatches[matchCode];
             activeMatch.Skips++;
 
-            PlayerState currentPlayer = GetCurrentPlayer(activeMatch);
-            PlayerState nextPlayer = GetNextPlayer(activeMatch);
+            PlayerState currentPlayer = activeMatch.GetCurrentPlayer();
+            PlayerState nextPlayer = activeMatch.GetNextPlayer();
 
             var matchResult = GameResult.None; 
 
@@ -142,7 +135,7 @@ namespace Services.Controllers
             }
             else
             {
-                activeMatch.Turn = GetNextTurn(activeMatch);
+                activeMatch.AdvanceTurn();
                 SetCurrentBlock(activeMatch, currentPlayer, nextPlayer); 
             }
 
@@ -154,7 +147,7 @@ namespace Services.Controllers
             var matchCode = _activeMatches.FirstOrDefault(a => a.Value.Players.Values.Any(p => p.Username == username)).Key;
             var activeMatch = _activeMatches[matchCode];
             var playerColor = activeMatch.Players.FirstOrDefault(p => p.Value.Username == username).Key;
-            var currentPlayer = GetCurrentPlayer(activeMatch);
+            var currentPlayer = activeMatch.GetCurrentPlayer();
 
             if (currentPlayer.Username == username)
             {
@@ -174,6 +167,11 @@ namespace Services.Controllers
             foreach (var player in activeMatch.Players.Values)
             {
                 _usersInActiveMatch[player.Username].OnPlayerLeave(username, playerColor);
+            }
+
+            if (activeMatch.Players.Count == 0)
+            {
+                _activeMatches.Remove(matchCode);
             }
         }
 
@@ -215,22 +213,9 @@ namespace Services.Controllers
             }
         }
 
-        private PlayerState GetCurrentPlayer(ActiveMatch activeMatch)
-        {
-            Color currentColorTurn = activeMatch.TurnOrder[activeMatch.Turn];
-            return activeMatch.Players[currentColorTurn];
-        }
-
-        private PlayerState GetNextPlayer(ActiveMatch activeMatch)
-        {
-            int nextTurn = GetNextTurn(activeMatch);
-            Color nextColorTurn = activeMatch.TurnOrder[nextTurn];
-            return activeMatch.Players[nextColorTurn];
-        }
-
         private void GameFinished(ActiveMatch activeMatch, PlayerState winnerPlayer)
         {
-            var currentPlayer = GetCurrentPlayer(activeMatch);
+            var currentPlayer = activeMatch.GetCurrentPlayer();
 
             foreach (var player in activeMatch.Players.Values)
             {
@@ -241,8 +226,5 @@ namespace Services.Controllers
                 }
             }
         }
-
-        private int GetNextTurn(ActiveMatch activeMatch) => 
-             (activeMatch.Turn + 1) % activeMatch.Players.Count;
     }
 }

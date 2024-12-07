@@ -2,8 +2,6 @@
 using Services.Dtos;
 using Services.Enums;
 using Services.Interfaces;
-using Services.MatchState;
-using System.Collections.Generic;
 using System.ServiceModel;
 
 namespace Services.Implementations
@@ -11,10 +9,6 @@ namespace Services.Implementations
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public partial class ServiceImplementation : IMatchService
     {
-        private static readonly Dictionary<string, IMatchServiceCallback> usersInActiveMatch = new Dictionary<string, IMatchServiceCallback>();
-        private static readonly Dictionary<string, ActiveMatch> activeMatches = new Dictionary<string, ActiveMatch>();
-        private readonly MatchController _matchController;
-
         public MatchDTO JoinToActiveMatch(string username)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IMatchServiceCallback>();

@@ -44,12 +44,12 @@ namespace Services.Implementations
             Console.WriteLine($"{username} cerró sesión");
             connectedUsers.Remove(username);
 
-            if (usersInMatchMaking.ContainsKey(username))
+            if (_usersInMatchMaking.ContainsKey(username))
             {
                 LeaveMatch(username); 
             }
 
-            if (usersInActiveMatch.ContainsKey(username))
+            if (_usersInActiveMatch.ContainsKey(username))
             {
                 LeaveActiveMatch(username);
             }
