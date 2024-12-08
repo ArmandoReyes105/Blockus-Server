@@ -1,5 +1,6 @@
 ﻿using Data.Model;
 using Services.Dtos;
+using Services.Enums;
 using System.ServiceModel;
 
 namespace Services.Interfaces

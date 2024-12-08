@@ -6,6 +6,8 @@ namespace Services.MatchState
 {
     public class ActiveMatch
     {
+        public string MatchCode { get; set; }
+
         public int Turn { get; set; } = 0; 
 
         public List<Color> TurnOrder { get; set; } = new List<Color>();

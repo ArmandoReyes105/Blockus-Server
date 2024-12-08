@@ -50,6 +50,7 @@
     <Compile Include="Dtos\AccountDTO.cs" />
     <Compile Include="Dtos\BlockDTO.cs" />
     <Compile Include="Dtos\MatchDTO.cs" />
+    <Compile Include="Dtos\MatchResumeDTO.cs" />
     <Compile Include="Dtos\PublicAccountDTO.cs" />
     <Compile Include="Enums\Block.cs" />
     <Compile Include="Enums\Color.cs" />
@@ -60,12 +61,14 @@
     <Compile Include="Implementations\ChatService.cs" />
     <Compile Include="Implementations\MatchMakingService.cs" />
     <Compile Include="Implementations\MatchService.cs" />
+    <Compile Include="Implementations\ResultsService.cs" />
     <Compile Include="Implementations\ServiceImplementation.cs" />
     <Compile Include="Implementations\SessionService.cs" />
     <Compile Include="Interfaces\IAccountService.cs" />
     <Compile Include="Interfaces\IChatService.cs" />
     <Compile Include="Interfaces\IMatchMakingService.cs" />
     <Compile Include="Interfaces\IMatchService.cs" />
+    <Compile Include="Interfaces\IResultsService.cs" />
     <Compile Include="Interfaces\ISessionService.cs" />
     <Compile Include="MatchState\ActiveMatch.cs" />
     <Compile Include="MatchState\PlayerState.cs" />

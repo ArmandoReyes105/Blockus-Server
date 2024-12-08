@@ -15,6 +15,7 @@ namespace Services.Implementations
 
         private static readonly Dictionary<string, MatchDTO> matches = new Dictionary<string, MatchDTO>();
         private static readonly Dictionary<string, ActiveMatch> activeMatches = new Dictionary<string, ActiveMatch>();
+        private static readonly Dictionary<string, MatchResumeDTO> matchResumes = new Dictionary<string, MatchResumeDTO>();
 
         private readonly MatchMakingController _matchMakingController;
         private readonly MatchController _matchController;
@@ -23,7 +24,7 @@ namespace Services.Implementations
         public ServiceImplementation()
         {
             _matchMakingController = new MatchMakingController(_usersInMatchMaking, matches);
-            _matchController = new MatchController(_usersInMatchMaking, _usersInActiveMatch, matches, activeMatches);
+            _matchController = new MatchController(_usersInMatchMaking, _usersInActiveMatch, matches, activeMatches, matchResumes);
             _chatController = new ChatController(_usersInChat, activeMatches);
         }
     }

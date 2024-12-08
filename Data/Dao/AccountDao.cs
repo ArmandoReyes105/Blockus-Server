@@ -109,5 +109,53 @@ namespace Data.Dao
 
             return resultAccount; 
         }
+
+        public int IncreaseVictories(int accountId)
+        {
+            int operationResult = 0;
+
+            using (var context = new BlockusEntities())
+            {
+                try
+                {
+
+                    var results = context.Results.Where(x => x.Id_Account == accountId).FirstOrDefault();
+                    results.Victories++; 
+                    operationResult = context.SaveChanges(); 
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    operationResult = -1; 
+                }
+            }
+
+            return operationResult;
+        }
+
+        public int IncreaseLosses(int accountId)
+        {
+            int operationResult = 0;
+
+            using (var context = new BlockusEntities())
+            {
+                try
+                {
+
+                    var results = context.Results.Where(x => x.Id_Account == accountId).FirstOrDefault();
+                    results.Losses++;
+                    operationResult = context.SaveChanges();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    operationResult = -1;
+                }
+            }
+
+            return operationResult;
+        }
     }
 }

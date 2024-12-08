@@ -14,18 +14,21 @@ namespace Services.Controllers
         private readonly Dictionary<string, MatchDTO> _matches;
         private readonly Dictionary<string, ActiveMatch> _activeMatches; 
         private readonly Dictionary<string, IMatchMakingServiceCallback> _usersInMatchMaking;
-        private readonly Dictionary<string, IMatchServiceCallback> _usersInActiveMatch; 
+        private readonly Dictionary<string, IMatchServiceCallback> _usersInActiveMatch;
+        private readonly Dictionary<string, MatchResumeDTO> _matchResumes;
 
         public MatchController(
             Dictionary<string, IMatchMakingServiceCallback> usersInMatchMaking,
             Dictionary<string, IMatchServiceCallback> usersInActiveMatch,
             Dictionary<string, MatchDTO> matches,
-            Dictionary<string, ActiveMatch> activeMatches)
+            Dictionary<string, ActiveMatch> activeMatches,
+            Dictionary<string, MatchResumeDTO> matchResumes)
         {
             _matches = matches;
             _activeMatches = activeMatches;
             _usersInMatchMaking = usersInMatchMaking;
             _usersInActiveMatch = usersInActiveMatch;
+            _matchResumes = matchResumes;
         }
 
         public MatchDTO JoinToActiveMatch(string username, IMatchServiceCallback callback)
@@ -73,6 +76,7 @@ namespace Services.Controllers
 
             if (currentPlayer.BlocksList.Count == 0)
             {
+                CreateMatchResume(activeMatch, currentPlayer);
                 GameFinished(activeMatch, currentPlayer);
                 matchResult = GameResult.Winner;
             }
@@ -131,6 +135,7 @@ namespace Services.Controllers
                     .OrderByDescending(player => player.Puntuation).FirstOrDefault();
 
                 matchResult = (currentPlayer.Username == winnerPlayer.Username) ? GameResult.Winner : GameResult.Losser;
+                CreateMatchResume(activeMatch, winnerPlayer);
                 GameFinished(activeMatch, winnerPlayer);
             }
             else
@@ -199,6 +204,7 @@ namespace Services.Controllers
         {
             _activeMatches[match.MatchCode] = new ActiveMatch
             {
+                MatchCode = match.MatchCode,
                 Block = Block.Block02,
                 TurnOrder = RandomGenerator.ShuffleColors(match.Players.Keys.ToList())
             }; 
@@ -225,6 +231,19 @@ namespace Services.Controllers
                     _usersInActiveMatch[player.Username].OnGameFinished(result);
                 }
             }
+        }
+
+        private void CreateMatchResume(ActiveMatch activeMatch, PlayerState winnerPlayer)
+        {
+            var matchResume = new MatchResumeDTO
+            {
+                MatchCode = activeMatch.MatchCode,
+                Winner = winnerPlayer,
+                PlayerList = activeMatch.Players.Values.ToList()
+            };
+
+            _matchResumes.Add(activeMatch.MatchCode, matchResume);
+            Console.WriteLine("Se agrego la partida con código: " + activeMatch.MatchCode);
         }
     }
 }
