@@ -49,9 +49,12 @@
     <Compile Include="Controllers\MatchMakingController.cs" />
     <Compile Include="Dtos\AccountDTO.cs" />
     <Compile Include="Dtos\BlockDTO.cs" />
+    <Compile Include="Dtos\FriendsDTO.cs" />
     <Compile Include="Dtos\MatchDTO.cs" />
     <Compile Include="Dtos\MatchResumeDTO.cs" />
+    <Compile Include="Dtos\ProfileConfiguration.cs" />
     <Compile Include="Dtos\PublicAccountDTO.cs" />
+    <Compile Include="Dtos\ResultsDTO.cs" />
     <Compile Include="Enums\Block.cs" />
     <Compile Include="Enums\Color.cs" />
     <Compile Include="Enums\GameResult.cs" />
