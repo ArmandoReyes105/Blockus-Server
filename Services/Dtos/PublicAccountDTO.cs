@@ -3,7 +3,7 @@
 namespace Services.Dtos
 {
     [DataContract]
-    public class AccountDTO
+    public class PublicAccountDTO
     {
         [DataMember]
         public int Id { get; set; }
@@ -12,12 +12,6 @@ namespace Services.Dtos
         public string Username { get; set; }
 
         [DataMember]
-        public string Email { get; set; }
-
-        [DataMember]
         public int ProfileImage { get; set; }
-
-        [DataMember]
-        public string Password { get; set; }
     }
 }

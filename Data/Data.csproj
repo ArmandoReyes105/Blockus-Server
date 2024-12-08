@@ -54,6 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dao\AccountDao.cs" />
+    <Compile Include="Dao\ProfileConfigurationDao.cs" />
+    <Compile Include="Dao\ResultsDao.cs" />
     <Compile Include="Model\Account.cs">
       <DependentUpon>BlockusModel.tt</DependentUpon>
     </Compile>
