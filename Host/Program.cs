@@ -12,6 +12,7 @@ namespace Host
                 host.Open();
                 Console.WriteLine("Server is running");
                 Console.WriteLine("Press any key to exit ...");
+                
                 Console.ReadLine(); 
             }
         }

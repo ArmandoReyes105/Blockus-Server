@@ -72,5 +72,16 @@ namespace Services.Interfaces
         /// <returns>Una lista de la información publica de las cuentas que coincidan</returns>
         [OperationContract]
         List<PublicAccountDTO> SearchByUsername(string username);
+
+        /// <summary>
+        /// Verifica que el nombre de usuario seleccionado sea unico
+        /// </summary>
+        /// <param name="username">Cadena de texto que contiene el username</param>
+        /// <returns>Entero que indica el estado de la operación, 
+        /// 1 = El username es unico, 
+        /// 0 = Ya existe registrado, 
+        /// -1 = Error con la base de datos</returns>
+        [OperationContract]
+        int IsUsernameUnique(string username); 
     }
 }

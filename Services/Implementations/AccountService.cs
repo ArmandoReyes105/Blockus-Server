@@ -1,10 +1,8 @@
 ﻿using Data.Dao;
 using Data.Model;
 using Services.Dtos;
-using Services.Enums;
 using Services.Interfaces;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 
 namespace Services.Implementations
 {
@@ -141,6 +139,12 @@ namespace Services.Implementations
             }
 
             return userMatches;
+        }
+
+        public int IsUsernameUnique(string username)
+        {
+            var dao = new AccountDao();
+            return dao.IsUniqueUsername(username);
         }
     }
 }

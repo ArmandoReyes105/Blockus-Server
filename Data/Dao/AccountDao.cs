@@ -19,40 +19,46 @@ namespace Data.Dao
 
             using (var context = new BlockusEntities())
             {
-                using (var transaction = context.Database.BeginTransaction())
+                try
                 {
-                    try
+                    using (var transaction = context.Database.BeginTransaction())
                     {
-                        context.Account.Add(account);
-                        context.SaveChanges();
-
-                        var configuration = new ProfileConfiguration
+                        try
                         {
-                            Id_Account = account.Id_Account,
-                            BoardStyle = 1, 
-                            TilesStyle = 1
-                        };
+                            context.Account.Add(account);
+                            context.SaveChanges();
 
-                        context.ProfileConfiguration.Add(configuration);
-                        context.SaveChanges();
-
-                        transaction.Commit();
-                        result = 1; 
-                    }catch (DbEntityValidationException ex)
-                    {
-                        transaction.Rollback();
-                        foreach (var validationErrors in ex.EntityValidationErrors)
-                        {
-                            foreach (var validationError in validationErrors.ValidationErrors)
+                            var configuration = new ProfileConfiguration
                             {
-                                Console.WriteLine($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
-                            }
-                        }
-                        result = 0; 
-                    }
-                }
-            }
+                                Id_Account = account.Id_Account,
+                                BoardStyle = 1,
+                                TilesStyle = 1
+                            };
 
+                            context.ProfileConfiguration.Add(configuration);
+                            context.SaveChanges();
+
+                            transaction.Commit();
+                            result = 1;
+                        } catch (DbEntityValidationException ex)
+                        {
+                            transaction.Rollback();
+                            foreach (var validationErrors in ex.EntityValidationErrors)
+                            {
+                                foreach (var validationError in validationErrors.ValidationErrors)
+                                {
+                                    Console.WriteLine($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                                }
+                            }
+                            result = 0;
+                        }
+                    } 
+                } catch (EntityException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    result = 0;
+                } 
+            }
             return result;
 
         }
@@ -368,6 +374,32 @@ namespace Data.Dao
                 Console.WriteLine(ex.Message);
                 return new List<Account>();
             }
+        }
+
+        public int IsUniqueUsername(string username)
+        {
+            int result = 0;
+            
+            try
+            {
+                using (var context = new BlockusEntities())
+                {
+                    var existAccount = context.Account.Any(x => x.Username == username);
+                    result = existAccount ? 0 : 1;
+                }
+            }
+            catch (SqlException ex)
+            {
+                result = -1; 
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                result = -1; 
+                Console.WriteLine(ex.Message);
+            }
+
+            return result; 
         }
     }
 }
