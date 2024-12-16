@@ -1,6 +1,7 @@
 ﻿using Data.Model;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -22,8 +23,7 @@ namespace Data.Dao
                 {
                     profileConfiguration = context.ProfileConfiguration.Where(pc => pc.Id_Account == idAccount).FirstOrDefault();
                 }
-            }
-            catch (SqlException e)
+            } catch (EntityException e)
             {
                 Console.WriteLine(e.Message);
                 profileConfiguration = new ProfileConfiguration
