@@ -1,6 +1,7 @@
 ﻿using Data.Model;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -21,8 +22,17 @@ namespace Data.Dao
                 {
                     results = context.Results.Where(r => r.Id_Account == idAccount).FirstOrDefault();
                 }
-            }
-            catch (SqlException e)
+            } catch (EntityException e)
+            {
+                Console.WriteLine(e.Message);
+                results = new Results
+                {
+                    Id_Result = -1,
+                    Victories = 0,
+                    Losses = 0,
+                    Id_Account = 0
+                };
+            } catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 results = new Results
