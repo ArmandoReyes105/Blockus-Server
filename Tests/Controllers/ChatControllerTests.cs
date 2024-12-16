@@ -126,5 +126,7 @@ namespace Tests.Controllers
             // Assert
             Assert.IsFalse(_mockUsersInChat.ContainsKey(username));
         }
+
+        
     }
 }
