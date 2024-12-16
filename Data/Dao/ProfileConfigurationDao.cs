@@ -34,6 +34,17 @@ namespace Data.Dao
                     Id_Account = 0
                 };
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                profileConfiguration = new ProfileConfiguration
+                {
+                    Id_Configuration = -1,
+                    BoardStyle = 0,
+                    TilesStyle = 0,
+                    Id_Account = 0
+                };
+            }
 
             if (profileConfiguration == null)
             {
