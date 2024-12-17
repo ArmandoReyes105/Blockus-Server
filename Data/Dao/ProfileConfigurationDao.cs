@@ -1,17 +1,21 @@
 ﻿using Data.Model;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity.Core;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Dao
 {
     public class ProfileConfigurationDao
     {
-        public ProfileConfigurationDao() { }
+
+        private readonly BlockusEntities _context; 
+
+        public ProfileConfigurationDao() : this(new BlockusEntities()) { }
+
+        public ProfileConfigurationDao(BlockusEntities context)
+        {
+            _context = context;
+        }
 
         public ProfileConfiguration GetProfileConfiguration(int idAccount)
         {
@@ -19,11 +23,9 @@ namespace Data.Dao
 
             try
             {
-                using (var context = new BlockusEntities())
-                {
-                    profileConfiguration = context.ProfileConfiguration.Where(pc => pc.Id_Account == idAccount).FirstOrDefault();
-                }
-            } catch (EntityException e)
+                profileConfiguration = _context.ProfileConfiguration.Where(pc => pc.Id_Account == idAccount).FirstOrDefault();
+            } 
+            catch (EntityException e)
             {
                 Console.WriteLine(e.Message);
                 profileConfiguration = new ProfileConfiguration

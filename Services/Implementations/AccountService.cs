@@ -40,7 +40,7 @@ namespace Services.Implementations
 
         public ResultsDTO GetAccountResults(int idAccount)
         {
-            ResultsDao dao = new ResultsDao();
+            ResultsDao dao = new ResultsDao(new BlockusEntities());
 
             var result = dao.GetResultsByAccount(idAccount);
             var resultDTO = new ResultsDTO
