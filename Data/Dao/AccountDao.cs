@@ -57,7 +57,11 @@ namespace Data.Dao
                 {
                     Console.WriteLine(ex.Message);
                     result = 0;
-                } 
+                } catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    result = 0;
+                }
             }
             return result;
 
@@ -259,7 +263,7 @@ namespace Data.Dao
                     return context.Friends.Where(f => f.Id_Account == idAccount).ToList();
                 }
             }
-            catch (SqlException ex)
+            catch (EntityException ex)
             {
                 Console.WriteLine("Error al obtener la lista de amigos " + ex.Message);
                 return new List<Friends>();
@@ -364,7 +368,7 @@ namespace Data.Dao
                     return context.Account.Where(a => a.Username.Contains(username)).ToList();
                 }
             }
-            catch (SqlException ex)
+            catch (EntityException ex)
             {
                 Console.WriteLine(ex.Message);
                 return new List<Account>();
@@ -388,7 +392,7 @@ namespace Data.Dao
                     result = existAccount ? 0 : 1;
                 }
             }
-            catch (SqlException ex)
+            catch (EntityException ex)
             {
                 result = -1; 
                 Console.WriteLine(ex.Message);
@@ -400,6 +404,11 @@ namespace Data.Dao
             }
 
             return result; 
+        }
+
+        public void Hola()
+        {
+            throw new NotImplementedException();
         }
     }
 }
