@@ -10,7 +10,6 @@ namespace Services.Implementations
     {
         public int CreateAccount(AccountDTO accountDTO)
         {
-
             var account = new Account()
             {
                 Username = accountDTO.Username,
