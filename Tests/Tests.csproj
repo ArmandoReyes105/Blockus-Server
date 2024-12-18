@@ -134,6 +134,7 @@
     <Compile Include="Controllers\ChatControllerTests.cs" />
     <Compile Include="Controllers\MatchControllerTests.cs" />
     <Compile Include="Controllers\MatchMakingControllerTests.cs" />
+    <Compile Include="Dao\AccountDaoTests.cs" />
     <Compile Include="Dao\ProfileConfigurationDaoTests.cs" />
     <Compile Include="Dao\ResultsDaoTests.cs" />
     <Compile Include="UnitTest1.cs" />
