@@ -468,6 +468,177 @@ namespace Tests.Dao
             Assert.IsNull(friends);
         }
 
+
+        //Remove Friend
+        [TestMethod]
+        public void RemoveFriendById_ShouldReturnSuccess()
+        {
+            var dao = new AccountDao(_context);
+
+            var result = dao.RemoveFriendById(2, 1);
+            var removedFriend = _context.Friends.FirstOrDefault(f => f.Id_Account == 1 && f.Id_Account_Friend == 2);
+
+            Assert.AreEqual(1, result); 
+            Assert.IsNull(removedFriend);
+        }
+
+        [TestMethod]
+        public void RemoveFriendById_ShouldReturnZeroWhenFriendNotFound()
+        {
+            var dao = new AccountDao(_context);
+            var result = dao.RemoveFriendById(99, 1);
+            Assert.AreEqual(0, result);
+        }
+
+        [TestMethod]
+        public void RemoveFriendById_ShouldHandleEntityException()
+        {
+            var dao = new AccountDao(_mockContext.Object);
+            _mockContext.Setup(c => c.SaveChanges()).Throws(new EntityException("Simulated EntityException"));
+
+            var result = dao.RemoveFriendById(2, 1);
+
+            Assert.AreEqual(-1, result);
+        }
+
+        [TestMethod]
+        public void RemoveFriendById_ShouldHandleGeneralException()
+        {
+            var dao = new AccountDao(_mockContext.Object);
+            _mockContext.Setup(c => c.SaveChanges()).Throws(new Exception("Simulated EntityException"));
+
+            var result = dao.RemoveFriendById(2, 1);
+
+            Assert.AreEqual(-1, result);
+        }
+
+
+        //GetAccountById
+        [TestMethod]
+        public void GetAccountById_ShouldReturnCorrectAccount()
+        {
+            var dao = new AccountDao(_context); 
+
+            var result = dao.GetAccountById(1);
+            
+            Assert.IsNotNull(result); 
+            Assert.AreEqual(1, result.Id_Account); 
+            Assert.AreEqual("Jax", result.Username); 
+        }
+
+        [TestMethod]
+        public void GetAccountById_ShouldReturnDefaultWhenNotFound()
+        {
+            var dao = new AccountDao(_context); 
+            
+            var result = dao.GetAccountById(99);  
+            
+            Assert.IsNotNull(result); 
+            Assert.AreEqual(0, result.Id_Account);
+        }
+
+        [TestMethod]
+        public void GetAccountById_ShouldHandleEntityException()
+        {
+            var dao = new AccountDao(_mockContext.Object);  
+            _mockContext.Setup(c => c.Account).Throws(new EntityException("Simulated EntityException")); 
+            
+            var result = dao.GetAccountById(1); Assert.IsNotNull(result); 
+            
+            Assert.AreEqual(-1, result.Id_Account);
+        }
+
+        [TestMethod]
+        public void GetAccountById_ShouldHandleGeneralException()
+        {
+            var dao = new AccountDao(_mockContext.Object);  
+            _mockContext.Setup(c => c.Account).Throws(new Exception("Simulated General Exception")); 
+            
+            var account = dao.GetAccountById(1); 
+            
+            Assert.IsNotNull(account); 
+            Assert.AreEqual(-1, account.Id_Account);
+        }
+
+
+        //GetAccountByUsername
+        [TestMethod]
+        public void GetAccountsByUsername_ShouldReturnCorrectAccounts()
+        {
+            var dao = new AccountDao(_context); 
+            var accounts = dao.GetAccountsByUsername("Abra"); 
+            Assert.IsNotNull(accounts); 
+            Assert.AreEqual(1, accounts.Count); 
+            Assert.AreEqual("Abraham", accounts.First().Username);
+        }
+
+        [TestMethod]
+        public void GetAccountsByUsername_ShouldReturnEmptyListWhenNotFound()
+        {
+            var dao = new AccountDao(_context); 
+            var result = dao.GetAccountsByUsername("NonExistentUsername"); 
+            Assert.IsNotNull(result); 
+            Assert.AreEqual(0, result.Count);
+        }
+
+        [TestMethod]
+        public void GetAccountsByUsername_ShouldHandleEntityException()
+        {
+            var dao = new AccountDao(_mockContext.Object);
+            _mockContext.Setup(c => c.Account).Throws(new EntityException("Simulated EntityException"));     
+            var accounts = dao.GetAccountsByUsername("Abra");
+            Assert.IsNull(accounts);
+        }
+
+        [TestMethod]
+        public void GetAccountsByUsername_ShouldHandleGeneralException()
+        {
+            var dao = new AccountDao(_mockContext.Object);
+            _mockContext.Setup(c => c.Account).Throws(new Exception("Simulated Exception"));
+            var accounts = dao.GetAccountsByUsername("Abra");
+            Assert.IsNull(accounts);
+        }
+
+
+        //IsUniqueUsername
+        [TestMethod]
+        public void IsUniqueUsername_ShouldReturnZeroWhenUsernameExists()
+        {
+            var dao = new AccountDao(_context); 
+            var result = dao.IsUniqueUsername("Jax"); 
+            Assert.AreEqual(0, result);
+        }
+
+        [TestMethod]
+        public void IsUniqueUsername_ShouldReturnOneWhenUsernameDoesNotExist()
+        {
+            var dao = new AccountDao(_context); 
+            var result = dao.IsUniqueUsername("NewUsername"); 
+            Assert.AreEqual(1, result);
+        }
+
+        [TestMethod]
+        public void IsUniqueUsername_ShouldHandleEntityException()
+        {
+            var dao = new AccountDao(_mockContext.Object); 
+            _mockContext.Setup(c => c.Account).Throws(new EntityException("Simulated EntityException")); 
+            
+            var result = dao.IsUniqueUsername("Jax"); 
+            
+            Assert.AreEqual(-1, result);
+        }
+
+        [TestMethod]
+        public void IsUniqueUsername_ShouldHandleGeneralException()
+        {
+            var dao = new AccountDao(_mockContext.Object);
+            _mockContext.Setup(c => c.Account).Throws(new Exception("Simulated Exception"));
+
+            var result = dao.IsUniqueUsername("Jax");
+
+            Assert.AreEqual(-1, result);
+        }
+
         [TestCleanup]
         public void CleanUp()
         {
