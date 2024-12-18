@@ -6,6 +6,7 @@ using System.Data.Entity.Core;
 using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 
 namespace Data.Dao
 {
@@ -67,27 +68,22 @@ namespace Data.Dao
                                 log.Error($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
                             }
                         }
-<<<<<<< HEAD
                         result = 0;
                     }
-=======
-                    } 
-                } catch (EntityException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    result = 0;
-                } catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    result = 0;
->>>>>>> b77b534cf79d01e1c8f9fabdee4d290fdb0793b7
-                }
+
+                } 
+            }
+            catch (EntityException ex)
+            {
+                log.Error("Create new account: ", ex);
+                result = 0;
             }
             catch (Exception ex)
             {
                 log.Error("Create new account: ", ex);
                 result = 0;
             }
+                
 
             return result;
 
@@ -127,21 +123,16 @@ namespace Data.Dao
         {
             int operationResult = 0;
 
-            using (var context = new BlockusEntities())
+            try
             {
-                try
-                {
-
-                    var results = context.Results.Where(x => x.Id_Account == accountId).FirstOrDefault();
-                    results.Victories++; 
-                    operationResult = context.SaveChanges(); 
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    operationResult = -1; 
-                }
+                var results = _context.Results.Where(x => x.Id_Account == accountId).FirstOrDefault();
+                results.Victories++;
+                operationResult = _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                log.Error("Increase Victories: " + ex); 
+                operationResult = -1;
             }
 
             return operationResult;
