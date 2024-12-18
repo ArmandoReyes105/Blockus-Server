@@ -83,24 +83,32 @@ namespace Services.Implementations
             List<PublicAccountDTO> friendsDTO = new List<PublicAccountDTO>();
 
             var accountFriends = dao.GetAccountFriends(idAccount);
-
-            foreach (var friend in accountFriends)
+            
+            if (accountFriends != null)
             {
-                var friendAccount = dao.GetAccountById((int)friend.Id_Account_Friend);
-                friends.Add(friendAccount);
-            }
-
-            foreach (var friendInfo in friends)
-            {
-                var dto = new PublicAccountDTO
+                foreach (var friend in accountFriends)
                 {
-                    Id = friendInfo.Id_Account,
-                    Username = friendInfo.Username,
-                    ProfileImage = (int)friendInfo.ProfileImage
-                };
+                    var friendAccount = dao.GetAccountById((int)friend.Id_Account_Friend);
+                    friends.Add(friendAccount);
+                }
 
-                friendsDTO.Add(dto);
+                foreach (var friendInfo in friends)
+                {
+                    var dto = new PublicAccountDTO
+                    {
+                        Id = friendInfo.Id_Account,
+                        Username = friendInfo.Username,
+                        ProfileImage = (int)friendInfo.ProfileImage
+                    };
+
+                    friendsDTO.Add(dto);
+                }
             }
+            else
+            {
+                friendsDTO = null; 
+            }
+            
 
             return friendsDTO;
         }
@@ -126,16 +134,24 @@ namespace Services.Implementations
 
             var foundUsers = dao.GetAccountsByUsername(username);
 
-            foreach (var user in foundUsers)
+            if (foundUsers != null)
             {
-                var dto = new PublicAccountDTO
+                foreach (var user in foundUsers)
                 {
-                    Id = user.Id_Account,
-                    Username = user.Username,
-                    ProfileImage = (int)user.ProfileImage
-                };
-                userMatches.Add(dto);
+                    var dto = new PublicAccountDTO
+                    {
+                        Id = user.Id_Account,
+                        Username = user.Username,
+                        ProfileImage = (int)user.ProfileImage
+                    };
+                    userMatches.Add(dto);
+                }
             }
+            else
+            {
+                userMatches = null; 
+            }
+            
 
             return userMatches;
         }

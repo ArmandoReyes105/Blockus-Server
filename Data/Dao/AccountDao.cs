@@ -260,33 +260,31 @@ namespace Data.Dao
         {
             try
             {
-                using (var context = new BlockusEntities())
-                {
-                    var deletedFriend = context.Friends.FirstOrDefault(f => f.Id_Account == idAccount
+                var deletedFriend = _context.Friends.FirstOrDefault(f => f.Id_Account == idAccount
                         && f.Id_Account_Friend == idFriend);
 
-                    if (deletedFriend != null)
-                    {
-                        context.Friends.Remove(deletedFriend);
-                        context.SaveChanges();
-                        return 1;
-                    }
-                    return 0;
+                if (deletedFriend != null)
+                {
+                    _context.Friends.Remove(deletedFriend);
+                    _context.SaveChanges();
+                    return 1;
                 }
+
+                return 0;
             }
             catch (EntityException ex)
             {
-                Console.WriteLine(ex.Message);
+                log.Error("Remove friend: ", ex);
                 return -1;
             }
             catch (SqlException ex)
             {
-                Console.WriteLine("Error en la base de datos, por favor intente mas tarde. \n" + ex.Message);
+                log.Error("Remove friend: ", ex);
                 return -1;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error inesperado. Intente mas tarde \n" + ex.Message);
+                log.Error("Remove friend: ", ex);
                 return -1;
             }
         }
@@ -296,45 +294,26 @@ namespace Data.Dao
             Account resultAccount;
             try
             {
-                using (var context = new BlockusEntities())
-                {
-                    resultAccount = context.Account.Where(a => a.Id_Account == idAccount).FirstOrDefault();
-                }
+                resultAccount = _context.Account.Where(a => a.Id_Account == idAccount).FirstOrDefault();
             }
             catch (EntityException ex)
             {
-                Console.WriteLine(ex.Message);
-                resultAccount = new Account
-                {
-                    Id_Account = -1,
-                    ProfileImage = 0
-                };
+                log.Error("Get account by id: ", ex); 
+                resultAccount = new Account { Id_Account = -1, ProfileImage = 0 };
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
-                resultAccount = new Account
-                {
-                    Id_Account = -1,
-                    ProfileImage = 0
-                };
+                log.Error("Get account by id: ", ex);
+                resultAccount = new Account { Id_Account = -1, ProfileImage = 0 };
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                resultAccount = new Account
-                {
-                    Id_Account = -1,
-                    ProfileImage = 0
-                };
+                log.Error("Get account by id: ", ex);
+                resultAccount = new Account { Id_Account = -1, ProfileImage = 0 };
             }
             if (resultAccount == null)
             {
-                resultAccount = new Account
-                {
-                    Id_Account = 0,
-                    ProfileImage = 0
-                };
+                resultAccount = new Account { Id_Account = 0, ProfileImage = 0 };
             }
 
             return resultAccount;
@@ -344,20 +323,17 @@ namespace Data.Dao
         {
             try
             {
-                using (var context = new BlockusEntities())
-                {
-                    return context.Account.Where(a => a.Username.Contains(username)).ToList();
-                }
+                return _context.Account.Where(a => a.Username.Contains(username)).ToList();
             }
             catch (EntityException ex)
             {
-                Console.WriteLine(ex.Message);
-                return new List<Account>();
+                log.Error("Get account by username: ", ex); 
+                return null;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return new List<Account>();
+                log.Error("Get account by username: ", ex);
+                return null; 
             }
         }
 
@@ -367,21 +343,18 @@ namespace Data.Dao
             
             try
             {
-                using (var context = new BlockusEntities())
-                {
-                    var existAccount = context.Account.Any(x => x.Username == username);
-                    result = existAccount ? 0 : 1;
-                }
+                var existAccount = _context.Account.Any(x => x.Username == username);
+                result = existAccount ? 0 : 1;
             }
             catch (EntityException ex)
             {
-                result = -1; 
-                Console.WriteLine(ex.Message);
+                result = -1;
+                log.Error("Is unique username: ", ex); 
             }
             catch (Exception ex)
             {
-                result = -1; 
-                Console.WriteLine(ex.Message);
+                result = -1;
+                log.Error("Is unique username: ", ex);
             }
 
             return result; 
