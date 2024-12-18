@@ -142,21 +142,16 @@ namespace Data.Dao
         {
             int operationResult = 0;
 
-            using (var context = new BlockusEntities())
+            try
             {
-                try
-                {
-
-                    var results = context.Results.Where(x => x.Id_Account == accountId).FirstOrDefault();
-                    results.Losses++;
-                    operationResult = context.SaveChanges();
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    operationResult = -1;
-                }
+                var results = _context.Results.Where(x => x.Id_Account == accountId).FirstOrDefault();
+                results.Losses++;
+                operationResult = _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                log.Error("Increase losses: ", ex); 
+                operationResult = -1;
             }
 
             return operationResult;
@@ -166,39 +161,38 @@ namespace Data.Dao
         {
             try
             {
-                using (var context = new BlockusEntities())
+                var acc = _context.Account.FirstOrDefault(a => a.Id_Account == account.Id_Account);
+
+                if (acc == null)
                 {
-                    var acc = context.Account.FirstOrDefault(a => a.Id_Account == account.Id_Account);
-
-                    if (acc == null)
-                    {
-                        Console.WriteLine("Account with Id: " + account.Id_Account + " not found");
-                        return 0;
-                    }
-
-                    acc.AccountPassword = account.AccountPassword;
-                    acc.Username = account.Username;
-                    acc.ProfileConfiguration = account.ProfileConfiguration;
-                    acc.ProfileImage = account.ProfileImage;
-
-                    int affectedRows = context.SaveChanges();
-
-                    return affectedRows;
+                    log.Info("Account not found: " + account.Username); 
+                    return 0;
                 }
+
+                acc.AccountPassword = account.AccountPassword;
+                acc.Username = account.Username;
+                acc.ProfileConfiguration = account.ProfileConfiguration;
+                acc.ProfileImage = account.ProfileImage;
+
+                int affectedRows = _context.SaveChanges();
+
+                return affectedRows;
             }
             catch (EntityException ex)
             {
-                Console.WriteLine(ex.Message);
+                log.Error("Update account: ", ex);
+                return -1; 
             }
             catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                log.Error("Update account: ", ex);
+                return -1;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                log.Error("Update account: ", ex);
+                return -1;
             }
-            return 0;
         }
 
         public int AddFriend(int idAccount, int idAccountFriend)
@@ -210,38 +204,36 @@ namespace Data.Dao
                     Console.WriteLine(idAccountFriend + " is you\n");
                     return -2;
                 }
-                using (var context = new BlockusEntities())
-                {
-                    var alreadyFriends = context.Friends
+
+                var alreadyFriends = _context.Friends
                         .FirstOrDefault(f => f.Id_Account == idAccount
                         && f.Id_Account_Friend == idAccountFriend);
 
-                    if (alreadyFriends != null)
-                    {
-                        Console.WriteLine("Already friends...\n");
-                        return 0;
-                    }
-
-                    var newFriend = new Friends
-                    {
-                        Id_Account = idAccount,
-                        Id_Account_Friend = idAccountFriend
-                    };
-
-                    context.Friends.Add(newFriend);
-                    context.SaveChanges();
-
-                    return 1;
+                if (alreadyFriends != null)
+                {
+                    Console.WriteLine("Already friends...\n");
+                    return 0;
                 }
+
+                var newFriend = new Friends
+                {
+                    Id_Account = idAccount,
+                    Id_Account_Friend = idAccountFriend
+                };
+
+                _context.Friends.Add(newFriend);
+                _context.SaveChanges();
+
+                return 1;
             }
             catch (EntityException ex)
             {
-                Console.WriteLine(ex.Message);
+                log.Error("Add Friend: ", ex); 
                 return -1;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                log.Error("Add Friend: ", ex); 
                 return -1;
             }
         }
@@ -250,20 +242,17 @@ namespace Data.Dao
         {
             try
             {
-                using (var context = new BlockusEntities())
-                {
-                    return context.Friends.Where(f => f.Id_Account == idAccount).ToList();
-                }
+                return _context.Friends.Where(f => f.Id_Account == idAccount).ToList();
             }
             catch (EntityException ex)
             {
-                Console.WriteLine("Error al obtener la lista de amigos " + ex.Message);
-                return new List<Friends>();
+                log.Error("Get account friends: ", ex); 
+                return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error inesperado, intente mas tarde. " + ex.Message);
-                return new List<Friends>();
+                return null;
             }
         }
 
@@ -396,11 +385,6 @@ namespace Data.Dao
             }
 
             return result; 
-        }
-
-        public void Hola()
-        {
-            throw new NotImplementedException();
         }
     }
 }
