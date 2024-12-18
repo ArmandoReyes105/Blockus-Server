@@ -62,7 +62,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\AccountControllerTests.cs" />
     <Compile Include="Controllers\ChatControllerTests.cs" />
     <Compile Include="Controllers\MatchControllerTests.cs" />
     <Compile Include="Controllers\MatchMakingControllerTests.cs" />
