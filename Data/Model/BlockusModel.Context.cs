@@ -10,6 +10,7 @@
 namespace Data.Model
 {
     using System;
+    using System.Data.Common;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
@@ -17,6 +18,11 @@ namespace Data.Model
     {
         public BlockusEntities()
             : base("name=BlockusEntities")
+        {
+        }
+
+        public BlockusEntities(DbConnection connection)
+            : base(connection, true)
         {
         }
     

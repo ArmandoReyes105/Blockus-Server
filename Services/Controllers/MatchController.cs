@@ -1,5 +1,6 @@
 ﻿using Services.Dtos;
 using Services.Enums;
+using Services.Implementations;
 using Services.Interfaces;
 using Services.MatchState;
 using Services.Utilities;
@@ -15,7 +16,7 @@ namespace Services.Controllers
         private readonly Dictionary<string, ActiveMatch> _activeMatches; 
         private readonly Dictionary<string, IMatchMakingServiceCallback> _usersInMatchMaking;
         private readonly Dictionary<string, IMatchServiceCallback> _usersInActiveMatch;
-        private readonly Dictionary<string, MatchResumeDTO> _matchResumes;
+        private readonly Dictionary<string, MatchResumeDTO> _matchResumes; 
 
         public MatchController(
             Dictionary<string, IMatchMakingServiceCallback> usersInMatchMaking,
@@ -88,7 +89,16 @@ namespace Services.Controllers
                 {
                     if (player.Color != currentPlayer.Color)
                     {
-                        _usersInActiveMatch[player.Username].OnBlockPlaced();
+                        try
+                        {
+                            _usersInActiveMatch[player.Username].OnBlockPlaced();
+                        }
+                        catch (Exception ex)
+                        {
+                            LeaveActiveMatch(player.Username);
+                            Console.WriteLine(player.Username + " Fue el que trono" + ex.Message);
+                        }
+                        
                     }
                 }
 
@@ -112,7 +122,8 @@ namespace Services.Controllers
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(player.Username + " Fue el que trono");
+                        LeaveActiveMatch(player.Username);
+                        Console.WriteLine(player.Username + " Fue el que trono" + ex.Message);
                     }
                     
                 }
@@ -171,7 +182,16 @@ namespace Services.Controllers
 
             foreach (var player in activeMatch.Players.Values)
             {
-                _usersInActiveMatch[player.Username].OnPlayerLeave(username, playerColor);
+                try
+                {
+                    _usersInActiveMatch[player.Username].OnPlayerLeave(username, playerColor);
+                }
+                catch (Exception ex)
+                {
+                    LeaveActiveMatch(player.Username);
+                    Console.WriteLine(player.Username + " Fue el que trono" + ex.Message);
+                }
+                
             }
 
             if (activeMatch.Players.Count == 0)
@@ -195,7 +215,15 @@ namespace Services.Controllers
             {
                 if (player.Color != currentPlayer.Color)
                 {
-                    _usersInActiveMatch[player.Username].OnCurrentBlockChanged(blockDTO);
+                    try
+                    {
+                        _usersInActiveMatch[player.Username].OnCurrentBlockChanged(blockDTO);
+                    }
+                    catch (Exception ex)
+                    {
+                        LeaveActiveMatch(player.Username);
+                        Console.WriteLine(player.Username + " Fue el que trono" + ex.Message);
+                    }
                 }
             }
         }
@@ -215,7 +243,15 @@ namespace Services.Controllers
             _matches.Remove(match.MatchCode);
             foreach (var player in match.Players.Values)
             {
-                _usersInMatchMaking.Remove(player.Username);
+                try
+                {
+                    _usersInMatchMaking.Remove(player.Username);
+                }
+                catch (Exception ex)
+                {
+                    LeaveActiveMatch(player.Username);
+                    Console.WriteLine(player.Username + " Fue el que trono" + ex.Message);
+                }
             }
         }
 
@@ -227,8 +263,16 @@ namespace Services.Controllers
             {
                 if (player.Username != currentPlayer.Username)
                 {
-                    var result = (player.Username == winnerPlayer.Username) ? GameResult.Winner : GameResult.Losser;
-                    _usersInActiveMatch[player.Username].OnGameFinished(result);
+                    try
+                    {
+                        var result = (player.Username == winnerPlayer.Username) ? GameResult.Winner : GameResult.Losser;
+                        _usersInActiveMatch[player.Username].OnGameFinished(result);
+                    }
+                    catch (Exception ex)
+                    {
+                        LeaveActiveMatch(player.Username);
+                        Console.WriteLine(player.Username + " Fue el que trono" + ex.Message);
+                    }
                 }
             }
         }

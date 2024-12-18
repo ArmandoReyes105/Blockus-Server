@@ -1,28 +1,30 @@
 ﻿using Data.Model;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity.Core;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Dao
 {
     public class ResultsDao
     {
-        public ResultsDao() { }
+
+        private readonly BlockusEntities _context; 
+
+        public ResultsDao(BlockusEntities context) 
+        {
+            _context = context; 
+        }
+
+        public ResultsDao() : this(new BlockusEntities()) { }
 
         public Results GetResultsByAccount(int idAccount)
         {
             var results = new Results();
             try
             {
-                using (var context = new BlockusEntities())
-                {
-                    results = context.Results.Where(r => r.Id_Account == idAccount).FirstOrDefault();
-                }
-            } catch (EntityException e)
+                results = _context.Results.Where(r => r.Id_Account == idAccount).FirstOrDefault();
+            } 
+            catch (EntityException e)
             {
                 Console.WriteLine(e.Message);
                 results = new Results
