@@ -22,5 +22,10 @@ namespace Services.Implementations
         {
             _matchMakingController.LeaveMatch(username);
         }
+
+        public void KickPlayer(string username)
+        {
+            _matchMakingController.KickPlayer(username);
+        }
     }
 }

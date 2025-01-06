@@ -33,6 +33,9 @@ namespace Services.Interfaces
         /// <param name="username">The username of the user leaving the match</param>
         [OperationContract(IsOneWay = true)]
         void LeaveMatch(string username);
+
+        [OperationContract]
+        void KickPlayer(string username);
     }
 
     /// <summary>
@@ -62,5 +65,8 @@ namespace Services.Interfaces
         /// <param name="matchDTO">object representing the match where a host has exited</param>
         [OperationContract]
         void NotifyHostExit(MatchDTO matchDTO);
+
+        [OperationContract]
+        void NotifyKickedPlayer();
     }
 }

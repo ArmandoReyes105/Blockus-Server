@@ -89,5 +89,31 @@ namespace Services.Controllers
                 }
             }
         }
+
+        public void KickPlayer(string username)
+        {
+            _usersInMatchMaking[username].NotifyKickedPlayer();
+
+            MatchDTO match = _matches.Values.FirstOrDefault(m => m.Players.Values.Any(p => p.Username == username));
+
+            if (match != null)
+            {
+                var key = match.Players.FirstOrDefault(p => p.Value.Username == username).Key;
+                match.Players.Remove(key);
+
+                var players = match.Players.Values.ToList();
+                foreach (var p in players)
+                {
+                    if (p.Username != match.Host)
+                    {
+                        _usersInMatchMaking[p.Username].NotifyPlayerExit(match);
+                    }
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 }
